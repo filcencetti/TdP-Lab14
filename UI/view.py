@@ -52,6 +52,10 @@ class View(ft.UserControl):
         self._page.controls.append(row3)
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
         self._page.controls.append(self.txt_result)
+        self._controller.fillDDstores()
+
+
+
         self._page.update()
 
 
@@ -67,4 +71,10 @@ class View(ft.UserControl):
         self._controller = controller
 
     def update_page(self):
+        self._page.update()
+
+    def create_alert(self, message):
+        dlg = ft.AlertDialog(title=ft.Text(message))
+        self._page.dialog = dlg
+        dlg.open = True
         self._page.update()
