@@ -12,7 +12,7 @@ class Model:
 
     def buildGraph(self,store,K):
         self._graph = nx.DiGraph()
-        allNodes = DAO.getNodes(store)
+        allNodes = DAO.getNodes(int(store))
         self._graph.add_nodes_from(allNodes)
         for i in allNodes:
             self._idMap[i.order_id] = i
@@ -24,7 +24,7 @@ class Model:
 
             elif edge.date1 > edge.date2:
                 self._graph.add_edge(self._idMap[edge.id1], self._idMap[edge.id2], weight=edge.quantity)
+    def getPath(self,node):
 
-
-
-
+        path = self._graph.successors(self._idMap[node])
+        return path

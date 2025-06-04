@@ -2,4 +2,4 @@ from model.model import Model
 
 mymodel = Model()
 mymodel.buildGraph(1,5)
-pass
+print(len(mymodel.getPath(9)))

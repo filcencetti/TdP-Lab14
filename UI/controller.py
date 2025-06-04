@@ -9,21 +9,48 @@ class Controller:
         self._model = model
 
     def fillDDstores(self):
-        myValuesDD = list(map(lambda x: ft.dropdown.Option(data=x, key=x.store_id, on_click=self.read_DD_value), self._model.getStores()))
+        myValuesDD = list(map(lambda x: ft.dropdown.Option(data=x, key=x.store_id, on_click=self.read_DDStores_value), self._model.getStores()))
         self._view._ddStore.options = myValuesDD
 
     def handleCreaGrafo(self, e):
-        if self._view._ddStore is None or self._view._ddStore == "":
-            self._view.create_alert()
+        if self._view._ddStore.value is None or self._view._ddStore.value == "":
+            self._view.create_alert(f"Scegliere un negozio!!!")
+            self._view.update_page()
+            return
 
-        self._model.buildGraph(self.store,self._view._txtIntK.value)
+        if self._view._txtIntK.value == "":
+            self._view.create_alert(f"Scegliere un negozio!!!")
+            self._view.update_page()
+            return
 
+        try:
+            intK = int(self._view._txtIntK.value)
+        except:
+            self._view.create_alert(f"Inserire un valore numerico!!!")
+            self._view.update_page()
+            return
+        self._view.txt_result.controls.clear()
+        self._model.buildGraph(self.store.store_id,intK)
+        self._view.txt_result.controls.append(ft.Text(f"Grafi creato correttamente \n"
+                                              f"Numero di nodi: {self._model._graph.number_of_nodes()}\n"
+                                              f"Numero di archi: {self._model._graph.number_of_edges()}"))
+        self._view._ddNode.disabled = False
+        self._view._btnCerca.disabled = False
+        self.fillDDNode()
+        self._view.update_page()
+
+    def fillDDNode(self):
+        myValuesDD = list(map(lambda x: ft.dropdown.Option(data=x, key=x.order_id, on_click=self.read_DDNode_value),self._model._graph.nodes()))
+        self._view._ddNode.options = myValuesDD
 
     def handleCerca(self, e):
-        pass
+        longest_path = self._model.getPath(self._view._ddNode.value)
 
     def handleRicorsione(self, e):
         pass
 
-    def read_DD_value(self, e):
+    def read_DDStores_value(self, e):
         self.store = e.control.data
+
+    def read_DDNode_value(self, e):
+        self.selected_node = e.control.data
