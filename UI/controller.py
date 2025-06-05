@@ -44,7 +44,13 @@ class Controller:
         self._view._ddNode.options = myValuesDD
 
     def handleCerca(self, e):
-        longest_path = self._model.getPath(self._view._ddNode.value)
+        longest_path = self._model.getPath(int(self._view._ddNode.value))
+        for i in range(len(longest_path)):
+            if i == 0:
+                self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {longest_path[i]}"))
+            else:
+                self._view.txt_result.controls.append(ft.Text(f"{longest_path[i]}"))
+        self._view.update_page()
 
     def handleRicorsione(self, e):
         pass
