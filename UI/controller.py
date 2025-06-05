@@ -50,10 +50,19 @@ class Controller:
                 self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {longest_path[i]}"))
             else:
                 self._view.txt_result.controls.append(ft.Text(f"{longest_path[i]}"))
+        self._view._btnRicorsione.disabled = False
         self._view.update_page()
 
     def handleRicorsione(self, e):
-        pass
+        path = self._model.getMaxWeightedPath(int(self._view._ddNode.value))
+        for i in range(len(path)):
+            if i == 0:
+                self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {path[i]}"))
+            else:
+                self._view.txt_result.controls.append(ft.Text(f"{path[i]}"))
+
+        self._view.update_page()
+
 
     def read_DDStores_value(self, e):
         self.store = e.control.data

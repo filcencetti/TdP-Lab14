@@ -42,3 +42,27 @@ class Model:
                 path.append(node)
                 self.recursive_path(path)
                 path.pop()
+
+    def getMaxWeightedPath(self,node):
+        path = [self._idMap[node]]
+        self._best_total = 0
+        self._best_path = []
+        total = 0
+        max_weight = 10000
+        self.recursion(path,total,max_weight)
+        return self._best_path
+
+    def recursion(self,path,total,max_weight):
+        if total > self._best_total:
+            self._best_total = total
+            self._best_path = copy.deepcopy(path)
+
+        for node in self._graph.successors(path[-1]):
+            if node not in path:
+                weight_edge = self._graph[path[-1]][node]["weight"]
+                if weight_edge < max_weight:
+                    total += weight_edge
+                    path.append(node)
+                    self.recursion(path, total, weight_edge)
+                    total -= weight_edge
+                    path.pop()
