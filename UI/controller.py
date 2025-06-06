@@ -60,7 +60,7 @@ class Controller:
                 self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {path[i]}"))
             else:
                 self._view.txt_result.controls.append(ft.Text(f"{path[i]}"))
-
+        self._view.txt_result.controls.append(ft.Text(f"Peso del percorso {self._model._best_total}"))
         self._view.update_page()
 
 
