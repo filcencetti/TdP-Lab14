@@ -56,18 +56,17 @@ class DAO():
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """select o1.order_id as id1, o2.order_id as id2, o1.order_date as date1,o2.order_date as date2, (oi1.quantity+ oi2.quantity) as quantity
+        query = """select o1.order_id as id1, o2.order_id as id2, (oi1.quantity+ oi2.quantity) as quantity
                     from orders o1, orders o2, order_items oi1, order_items oi2 
                     where o1.order_id = oi1.order_id 
-                        and o1.order_id != o2.order_id 
+                        and o1.order_date > o2.order_date
                         and o2.order_id = oi2.order_id 
                         and o1.store_id = o2.store_id
                         and o1.store_id = %s
-                        and datediff(o1.order_date, o2.order_date) < %s
-                        and datediff(o1.order_date, o2.order_date) > - %s
-                    group by o1.order_id, o2.order_id, o1.order_date, o2.order_date 
+                        and DATEDIFF(o1.order_date, o2.order_date) < %s
+                    group by o1.order_id, o2.order_id
                     """
-        cursor.execute(query,(store_id, K, K))
+        cursor.execute(query,(store_id, K))
 
         for row in cursor:
             result.append(Connection(**row))

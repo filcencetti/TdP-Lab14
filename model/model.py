@@ -22,26 +22,12 @@ class Model:
 
         allEdges = DAO.getEdges(store,K)
         for edge in allEdges:
-            if edge.date1 < edge.date2:
-                self._graph.add_edge(self._idMap[edge.id2],self._idMap[edge.id1],weight=edge.quantity)
-
-            elif edge.date1 > edge.date2:
-                self._graph.add_edge(self._idMap[edge.id1], self._idMap[edge.id2], weight=edge.quantity)
+            self._graph.add_edge(self._idMap[edge.id1],self._idMap[edge.id2],weight=edge.quantity)
 
     def getPath(self,node):
-        path = [self._idMap[node]]
-        self.recursive_path(path)
-        return self._longest_path
-
-    def recursive_path(self, path):
-        if len(path) > len(self._longest_path):
-            self._longest_path = copy.deepcopy(path)
-
-        for node in self._graph.successors(path[-1]):
-            if node not in path:
-                path.append(node)
-                self.recursive_path(path)
-                path.pop()
+        tree = nx.bfs_tree(self._graph, self._idMap[int(node)])
+        nodi = list(tree.nodes())
+        return nodi[1:]
 
     def getMaxWeightedPath(self,node):
         path = [self._idMap[node]]

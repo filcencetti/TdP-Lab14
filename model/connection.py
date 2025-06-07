@@ -5,8 +5,6 @@ from datetime import datetime
 class Connection:
     id1 : int
     id2 : int
-    date1 : datetime
-    date2 : datetime
     quantity : int
 
     def __str__(self):
