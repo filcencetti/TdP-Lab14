@@ -74,7 +74,7 @@ class Model:
         return nodi[1:]
 
     def getDFSNodesFromTree(self, source):
-        tree = nx.dfs_tree(self._graph, source)
+        tree = nx.dfs_tree(self._graph, self._idMap[int(source)])
         nodi = list(tree.nodes())
         return nodi[1:]
 
