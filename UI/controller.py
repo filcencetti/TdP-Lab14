@@ -59,7 +59,6 @@ class Controller:
         self._view.txt_result.controls.append(ft.Text(f"Peso del percorso {self._model._bestScore}"))
         self._view.update_page()
 
-
     def read_DDStores_value(self, e):
         self.store = e.control.data
 
