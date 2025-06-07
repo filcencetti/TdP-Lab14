@@ -52,13 +52,11 @@ class Controller:
         self._view.update_page()
 
     def handleRicorsione(self, e):
-        path = self._model.getMaxWeightedPath(int(self._view._ddNode.value))
-        for i in range(len(path)):
-            if i == 0:
-                self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {path[i]}"))
-            else:
-                self._view.txt_result.controls.append(ft.Text(f"{path[i]}"))
-        self._view.txt_result.controls.append(ft.Text(f"Peso del percorso {self._model._best_total}"))
+        self._model.getMaxWeightedPath(int(self._view._ddNode.value))
+        self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {self._view._ddNode.value}"))
+        for i in range(len(self._model._bestPath)):
+            self._view.txt_result.controls.append(ft.Text(f"{self._model._bestPath[i]}"))
+        self._view.txt_result.controls.append(ft.Text(f"Peso del percorso {self._model._bestScore}"))
         self._view.update_page()
 
 

@@ -25,30 +25,58 @@ class Model:
             self._graph.add_edge(self._idMap[edge.id1],self._idMap[edge.id2],weight=edge.quantity)
 
     def getPath(self,node):
-        tree = nx.bfs_tree(self._graph, self._idMap[int(node)])
-        nodi = list(tree.nodes())
-        return nodi[1:]
+        source = self._idMap[node]
+        lp = []
 
-    def getMaxWeightedPath(self,node):
-        path = [self._idMap[node]]
-        self._best_total = 0
-        self._best_path = []
-        total = 0
-        max_weight = 10000
-        self.recursion(path,total,max_weight)
-        return self._best_path
+        # for source in self._graph.nodes:
+        tree = nx.dfs_tree(self._graph, source)
+        nodes = list(tree.nodes())
 
-    def recursion(self,path,total,max_weight):
-        if total > self._best_total:
-            self._best_total = total
-            self._best_path = copy.deepcopy(path)
+        for node in nodes:
+            tmp = [node]
 
-        for node in self._graph.successors(path[-1]):
-            if node not in path:
-                weight_edge = self._graph[path[-1]][node]["weight"]
-                if weight_edge < max_weight:
-                    total += weight_edge
-                    path.append(node)
-                    self.recursion(path, total, weight_edge)
-                    total -= weight_edge
-                    path.pop()
+            while tmp[0] != source:
+                pred = nx.predecessor(tree, source, tmp[0])
+                tmp.insert(0, pred[0])
+
+            if len(tmp) > len(lp):
+                lp = copy.deepcopy(tmp)
+
+        return lp
+
+
+    def getMaxWeightedPath(self, startStr):
+            self._bestPath = []
+            self._bestScore = 0
+
+            start = self._idMap[int(startStr)]
+
+            parziale = [start]
+
+            vicini = self._graph.neighbors(start)
+            for v in vicini:
+                parziale.append(v)
+                self._ricorsione(parziale)
+                parziale.pop()
+
+            return self._bestPath, self._bestScore
+
+    def _ricorsione(self, parziale):
+            if self.getScore(parziale) > self._bestScore:
+                self._bestScore = self.getScore(parziale)
+                self._bestPath = copy.deepcopy(parziale)
+
+            for v in self._graph.neighbors(parziale[-1]):
+                if (v not in parziale and  # check if not in parziale
+                        self._graph[parziale[-2]][parziale[-1]]["weight"] >
+                        self._graph[parziale[-1]][v]["weight"]):  # check if peso nuovo arco è minore del precedente
+                    parziale.append(v)
+                    self._ricorsione(parziale)
+                    parziale.pop()
+
+    def getScore(self,path):
+        tot = 0
+        for i in range(len(path) - 1):
+            tot += self._graph[path[i]][path[i + 1]]["weight"]
+
+        return tot

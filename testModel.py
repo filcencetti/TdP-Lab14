@@ -1,8 +1,8 @@
 from model.model import Model
 
 mymodel = Model()
-mymodel.buildGraph(2,5)
+mymodel.buildGraph(1,5)
 print(mymodel._graph.number_of_nodes())
-for i in mymodel.getPath(10):
+for i in mymodel.getPath(9):
     print(i)
-print(mymodel.getMaxWeightedPath(10))
+print(mymodel.getMaxWeightedPath(9))
