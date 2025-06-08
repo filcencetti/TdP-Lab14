@@ -22,7 +22,7 @@ class Model:
 
         allEdges = DAO.getEdges(store,K)
         for edge in allEdges:
-            self._graph.add_edge(self._idMap[edge.id1],self._idMap[edge.id2],weight=edge.quantity)
+            self._graph.add_edge(self._idMap[edge[0]],self._idMap[edge[1]],weight=edge[2])
 
     def getPath(self,node):
         source = self._idMap[node]

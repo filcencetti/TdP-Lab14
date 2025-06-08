@@ -1,5 +1,4 @@
 from database.DB_connect import DBConnect
-from model.connection import Connection
 from model.order import Order
 from model.store import Store
 
@@ -55,8 +54,8 @@ class DAO():
 
         result = []
 
-        cursor = conn.cursor(dictionary=True)
-        query = """select o1.order_id as id1, o2.order_id as id2, (oi1.quantity+ oi2.quantity) as quantity
+        cursor = conn.cursor()
+        query = """select o1.order_id as id1, o2.order_id as id2, count(oi1.quantity + oi2.quantity) as quantity
                     from orders o1, orders o2, order_items oi1, order_items oi2 
                     where o1.order_id = oi1.order_id 
                         and o1.order_date > o2.order_date
@@ -69,7 +68,7 @@ class DAO():
         cursor.execute(query,(store_id, K))
 
         for row in cursor:
-            result.append(Connection(**row))
+            result.append(row)
 
         cursor.close()
         conn.close()
