@@ -44,37 +44,32 @@ class Model:
 
         return lp
 
+    def getMaxWeightedPath(self, node_start):
+        self._bestPath = []
+        self._bestScore = 0
 
-    def getMaxWeightedPath(self, startStr):
-            self._bestPath = []
-            self._bestScore = 0
+        parziale = [self._idMap[node_start]]
 
-            start = self._idMap[int(startStr)]
+        for v in self._graph.neighbors(self._idMap[node_start]): # == self._graph.successors()
+            parziale.append(v)
+            self.recursion(parziale)
+            parziale.pop()
 
-            parziale = [start]
+        return self._bestPath, self._bestScore
 
-            vicini = self._graph.neighbors(start)
-            for v in vicini:
+    def recursion(self, parziale):
+        if self.getScore(parziale) > self._bestScore:
+            self._bestScore = self.getScore(parziale)
+            self._bestPath = copy.deepcopy(parziale)
+
+        for v in self._graph.neighbors(parziale[-1]): # == self._graph.successors()
+            if (v not in parziale and  # check if not in parziale
+            self._graph[parziale[-2]][parziale[-1]]["weight"] > self._graph[parziale[-1]][v]["weight"]):  # check if peso nuovo arco è minore del precedente
                 parziale.append(v)
-                self._ricorsione(parziale)
+                self.recursion(parziale)
                 parziale.pop()
 
-            return self._bestPath, self._bestScore
-
-    def _ricorsione(self, parziale):
-            if self.getScore(parziale) > self._bestScore:
-                self._bestScore = self.getScore(parziale)
-                self._bestPath = copy.deepcopy(parziale)
-
-            for v in self._graph.neighbors(parziale[-1]):
-                if (v not in parziale and  # check if not in parziale
-                        self._graph[parziale[-2]][parziale[-1]]["weight"] >
-                        self._graph[parziale[-1]][v]["weight"]):  # check if peso nuovo arco è minore del precedente
-                    parziale.append(v)
-                    self._ricorsione(parziale)
-                    parziale.pop()
-
-    def getScore(self,path):
+    def getScore(self, path):
         tot = 0
         for i in range(len(path) - 1):
             tot += self._graph[path[i]][path[i + 1]]["weight"]
