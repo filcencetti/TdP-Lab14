@@ -45,6 +45,7 @@ class Controller:
 
     def handleCerca(self, e):
         longest_path = self._model.getPath(int(self._view._ddNode.value))
+        self._view.txt_result.controls.append(ft.Text(f"Cammino più lungo"))
         self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {self._view._ddNode.value}"))
         for i in range(len(longest_path)):
             self._view.txt_result.controls.append(ft.Text(f"{longest_path[i]}"))
@@ -53,7 +54,7 @@ class Controller:
 
     def handleRicorsione(self, e):
         self._model.getMaxWeightedPath(int(self._view._ddNode.value))
-        self._view.txt_result.controls.append(ft.Text(f"Nodo di partenza: {self._view._ddNode.value}"))
+        self._view.txt_result.controls.append(ft.Text(f"Cammino di peso massimo"))
         for i in range(len(self._model._bestPath)):
             self._view.txt_result.controls.append(ft.Text(f"{self._model._bestPath[i]}"))
         self._view.txt_result.controls.append(ft.Text(f"Peso del percorso {self._model._bestScore}"))
